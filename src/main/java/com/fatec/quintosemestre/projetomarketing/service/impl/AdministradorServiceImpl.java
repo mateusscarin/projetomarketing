@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,10 +23,14 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Autowired
     private AdministradorRepository administradorRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public ResponseEntity<Object> cadastrar(UsuarioDTO objeto) throws Exception {
         Administrador administrador = new Administrador();
         BeanUtils.copyProperties(objeto, administrador, "id", "tipoUsuario");
+        administrador.setSenha(passwordEncoder.encode(administrador.getSenha()));
         Administrador objetoCriado = administradorRepository.saveAndFlush(administrador);
         return ResponseEntity.created(
                 ServletUriComponentsBuilder
@@ -51,6 +56,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     public ResponseEntity<Object> editar(Long idObjeto, UsuarioDTO objeto) throws Exception {
         Administrador paraEditar = administradorRepository.findById(idObjeto).orElseThrow(() -> new NoSuchElementException("O administrador com ID " + idObjeto + " não foi encontrado!"));
         BeanUtils.copyProperties(objeto, paraEditar, "id", "tipoUsuario");
+        paraEditar.setSenha(passwordEncoder.encode(paraEditar.getSenha()));
         administradorRepository.saveAndFlush(paraEditar);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(paraEditar));
     }
