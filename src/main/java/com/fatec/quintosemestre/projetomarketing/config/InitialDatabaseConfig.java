@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.fatec.quintosemestre.projetomarketing.model.Administrador;
 import com.fatec.quintosemestre.projetomarketing.repository.AdministradorRepository;
 
-@Configuration()
+@Configuration
 public class InitialDatabaseConfig {
 
     @Autowired

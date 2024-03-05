@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fatec.quintosemestre.projetomarketing.model.dto.LoginDTO;
 import com.fatec.quintosemestre.projetomarketing.service.LoginService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/auth")
 public class LoginController {
@@ -18,7 +20,7 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping(value = "/token")
-    public ResponseEntity<Object> login(@RequestBody LoginDTO dto) {
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginDTO dto) {
         return loginService.login(dto);
     }
     
