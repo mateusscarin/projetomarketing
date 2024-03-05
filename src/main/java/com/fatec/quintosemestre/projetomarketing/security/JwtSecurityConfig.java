@@ -1,4 +1,4 @@
-package com.fatec.quintosemestre.projetomarketing.config;
+package com.fatec.quintosemestre.projetomarketing.security;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -46,6 +46,7 @@ public class JwtSecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.POST, "/casual", "/auth/**").permitAll()
+                        .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("SCOPE_ADMIN")
                         .anyRequest().authenticated())
                 .csrf((csrf) -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())

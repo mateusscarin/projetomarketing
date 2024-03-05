@@ -1,4 +1,4 @@
-package com.fatec.quintosemestre.projetomarketing.config.impl;
+package com.fatec.quintosemestre.projetomarketing.security.impl;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,12 +14,14 @@ public class UserDetailsImpl implements UserDetails {
 
     private Long id;
     private String cpf;
+    private String nomeCompleto;
     private String senha;
     private Collection<? extends GrantedAuthority> permissoes;
 
-    public UserDetailsImpl(Long id, String cpf, String senha, TipoUsuario tipoUsuario) {
+    public UserDetailsImpl(Long id, String cpf, String nomeCompleto, String senha, TipoUsuario tipoUsuario) {
         this.id = id;
         this.cpf = cpf;
+        this.nomeCompleto = nomeCompleto;
         this.senha = senha;
         this.permissoes = Arrays.asList(new SimpleGrantedAuthority(tipoUsuario.toString()));
     }
@@ -36,7 +38,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.cpf;
+        return this.nomeCompleto;
     }
 
     @Override
