@@ -32,7 +32,16 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+
 @Configuration
+@SecurityScheme(type = SecuritySchemeType.HTTP, name = "Bearer Authentication", scheme = "bearer", bearerFormat = "JWT", in = SecuritySchemeIn.HEADER)
+@OpenAPIDefinition(security = @SecurityRequirement(name = "Bearer Authentication"), info = @Info(title = "API UAI v1.0"))
 public class JwtSecurityConfig {
 
     @Value("${jwt.public.key}")
@@ -46,6 +55,7 @@ public class JwtSecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.POST, "/casual", "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("SCOPE_ADMIN")
                         .anyRequest().authenticated())
                 .csrf((csrf) -> csrf.disable())
@@ -76,15 +86,15 @@ public class JwtSecurityConfig {
     }
 
     @Bean
-	public AuthenticationManager authenticationManager(
-			UserDetailsService users,
-			PasswordEncoder passwordEncoder) {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(users);
-		authenticationProvider.setPasswordEncoder(passwordEncoder);
+    public AuthenticationManager authenticationManager(
+            UserDetailsService users,
+            PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(users);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
 
-		return new ProviderManager(authenticationProvider);
-	}
+        return new ProviderManager(authenticationProvider);
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
