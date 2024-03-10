@@ -2,6 +2,7 @@ package com.fatec.quintosemestre.projetomarketing.security;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.fatec.quintosemestre.projetomarketing.service.impl.UserDetailsServiceImpl;
 import com.nimbusds.jose.jwk.JWK;
@@ -46,8 +50,10 @@ public class JwtSecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.POST, "/casual", "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/chats/**").permitAll()
                         .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("SCOPE_ADMIN")
                         .anyRequest().authenticated())
+                .cors((cors) -> corsConfigurationSource())
                 .csrf((csrf) -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer((oauth2ResourceServer) -> oauth2ResourceServer.jwt(Customizer.withDefaults()))
@@ -76,19 +82,31 @@ public class JwtSecurityConfig {
     }
 
     @Bean
-	public AuthenticationManager authenticationManager(
-			UserDetailsService users,
-			PasswordEncoder passwordEncoder) {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(users);
-		authenticationProvider.setPasswordEncoder(passwordEncoder);
+    public AuthenticationManager authenticationManager(
+            UserDetailsService users,
+            PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(users);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
 
-		return new ProviderManager(authenticationProvider);
-	}
+        return new ProviderManager(authenticationProvider);
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }
