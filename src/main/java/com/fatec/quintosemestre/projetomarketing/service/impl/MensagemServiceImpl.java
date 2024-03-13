@@ -16,8 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Service
-public class MensagemServiceImpl implements MensagemService{
-        @Autowired
+public class MensagemServiceImpl implements MensagemService {
+    
+    @Autowired
     private MensagemRepository mensagemRepository;
 
     @Override
@@ -25,7 +26,7 @@ public class MensagemServiceImpl implements MensagemService{
         Mensagem mensagem = new Mensagem();
         BeanUtils.copyProperties(objeto, mensagem, "id");
         Mensagem objetoCriado = mensagemRepository.saveAndFlush(mensagem);
-                return ResponseEntity.created(
+        return ResponseEntity.created(
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
                         .path("/{id}")
@@ -48,7 +49,8 @@ public class MensagemServiceImpl implements MensagemService{
     @Override
     public ResponseEntity<Object> editar(Long idObjeto, MensagenDTO objeto) throws Exception {
         Mensagem aEditar = mensagemRepository.findById(idObjeto)
-        .orElseThrow(() -> new NoSuchElementException("A mensagem com ID " + idObjeto + " não foi encontrada!"));
+                .orElseThrow(
+                        () -> new NoSuchElementException("A mensagem com ID " + idObjeto + " não foi encontrada!"));
         BeanUtils.copyProperties(objeto, aEditar, "id");
         Mensagem objetoAtualizado = mensagemRepository.saveAndFlush(aEditar);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(objetoAtualizado));
@@ -57,8 +59,9 @@ public class MensagemServiceImpl implements MensagemService{
     @Override
     public ResponseEntity<Object> listarPorId(Long idObjeto) throws Exception {
         Mensagem mensagem = mensagemRepository.findById(idObjeto)
-                .orElseThrow(() -> new NoSuchElementException("A mensagem com ID " + idObjeto + " não foi encontrada!"));
+                .orElseThrow(
+                        () -> new NoSuchElementException("A mensagem com ID " + idObjeto + " não foi encontrada!"));
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(mensagem));
     }
-    
+
 }
