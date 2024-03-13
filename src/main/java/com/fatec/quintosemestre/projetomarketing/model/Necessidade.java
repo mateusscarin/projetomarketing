@@ -19,23 +19,28 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Necessidade {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
-    
+
     @Column
     @NotNull
     @NotBlank
     private String nome;
-    
+
     @Column
     @NotNull
     @NotBlank
     private String descricao;
-    
-    public Necessidade(){};
+
+    public Necessidade() {
+    };
+
+    public Necessidade(Long id) {
+        this.id = id;
+    }
 
     public Necessidade(Long id, String nome, String descricao) {
         this.id = id;
@@ -66,8 +71,5 @@ public class Necessidade {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
-    
-    
-    
+
 }
