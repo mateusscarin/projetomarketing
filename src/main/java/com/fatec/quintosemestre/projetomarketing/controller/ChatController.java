@@ -82,7 +82,7 @@ public class ChatController {
             @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
             @ApiResponse(responseCode = "500", description = "Erro Interno (Internal Server Error)")
     })
-    public ResponseEntity<Object> listarPorUsuarioAbertura(@PathVariable Long idNecessidade) throws Exception {
+    public ResponseEntity<Object> listarPorNecessidade(@PathVariable Long idNecessidade) throws Exception {
         return service.listarPorNecessidade(idNecessidade);
     }
     

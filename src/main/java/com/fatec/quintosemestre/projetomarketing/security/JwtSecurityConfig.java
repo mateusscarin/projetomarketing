@@ -58,9 +58,12 @@ public class JwtSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/administrador", "/administrador/**", "/chat/finalizar-ou-reabrir/**", "/chat/necessidade/**").hasAnyAuthority("SCOPE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/casual", "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/necessidade").hasAnyAuthority("SCOPE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/necessidade/**").hasAnyAuthority("SCOPE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/chat").hasAnyAuthority("SCOPE_ADMIN")
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("SCOPE_ADMIN")
                         .anyRequest().authenticated())
                 .csrf((csrf) -> csrf.disable())
                 .cors((cors) -> corsConfigurationSource())
