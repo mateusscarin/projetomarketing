@@ -1,15 +1,19 @@
 package com.fatec.quintosemestre.projetomarketing.model.dto;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class MensagenDTO {
-    private Long id;
-    
 
+    private Long id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataDeEnvio;
-    
+
     @NotNull(message = "O texto precisa ser informado!")
     @NotBlank(message = "O campo texto não pode estar em branco!")
     private String texto;
@@ -38,7 +42,4 @@ public class MensagenDTO {
         this.texto = texto;
     }
 
-
-    
-    
 }

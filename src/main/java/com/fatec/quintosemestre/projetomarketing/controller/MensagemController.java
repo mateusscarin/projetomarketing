@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping(value = "/mensagem")
 public class MensagemController {
+
     @Autowired
     private MensagemService service;
 
@@ -39,4 +39,5 @@ public class MensagemController {
     public ResponseEntity<Object> editar(@PathVariable Long id, @RequestBody @Valid MensagenDTO dto) throws Exception {
         return service.editar(id, dto);
     }
+    
 }

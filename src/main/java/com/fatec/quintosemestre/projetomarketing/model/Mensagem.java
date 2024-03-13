@@ -1,7 +1,5 @@
 package com.fatec.quintosemestre.projetomarketing.model;
 
-
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,16 +14,16 @@ import java.util.Objects;
 
 @Entity
 public class Mensagem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
-    
-    @Column (name = "data_de_envio")
 
+    @Column(name = "data_de_envio")
     private LocalDateTime dataDeEnvio;
-    
-    @Column (name = "texto")
+
+    @Column(name = "texto")
     @NotBlank
     @NotNull
     private String texto;
@@ -53,21 +51,15 @@ public class Mensagem {
     public void setTexto(String texto) {
         this.texto = texto;
     }
-    
-
 
     public Mensagem() {
     }
-    
+
     @PrePersist
     @PreUpdate
     public void atribuirDataDeEnvio() {
-       this.dataDeEnvio = LocalDateTime.now();
-}
-
-    
-
- 
+        this.dataDeEnvio = LocalDateTime.now();
+    }
 
     @Override
     public int hashCode() {
@@ -90,6 +82,5 @@ public class Mensagem {
         final Mensagem other = (Mensagem) obj;
         return Objects.equals(this.id, other.id);
     }
-            
-    
+
 }

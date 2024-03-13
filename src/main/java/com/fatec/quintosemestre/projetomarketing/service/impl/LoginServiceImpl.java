@@ -48,6 +48,7 @@ public class LoginServiceImpl implements LoginService {
                 .expiresAt(now.plusSeconds(expiry))
                 .subject(authenticationResponse.getName())
                 .claim("scope", scope)
+                .claim("principal", dto.getCpf())
                 .build();
 
         String token = encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
