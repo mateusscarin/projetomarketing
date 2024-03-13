@@ -74,4 +74,11 @@ public class ControllerExceptionHandler {
                 .body(new ApiResponse<>(ex.getMostSpecificCause().getMessage(), request.getRequestURI()));
     }
 
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<Object> tratarErrosDeMetodosNaoSuportados(UnsupportedOperationException ex,
+            HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+                .body(new ApiResponse<>(ex.getMessage(), request.getRequestURI()));
+    }
+
 }

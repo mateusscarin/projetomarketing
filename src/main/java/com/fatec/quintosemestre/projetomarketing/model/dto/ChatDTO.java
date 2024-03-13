@@ -1,13 +1,8 @@
 package com.fatec.quintosemestre.projetomarketing.model.dto;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fatec.quintosemestre.projetomarketing.model.Chat;
-import com.fatec.quintosemestre.projetomarketing.model.Necessidade;
-import com.fatec.quintosemestre.projetomarketing.model.Profissional;
-import com.fatec.quintosemestre.projetomarketing.model.Usuario;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -20,11 +15,6 @@ public class ChatDTO {
 
     private String nomeNecessidade;
 
-    @NotNull(message = "O ID do usuário que iniciou o chat precisa ser informado!")
-    private Long idUsuarioAbertura;
-
-    private String nomeUsuarioAbertura;
-
     private Long idUsuarioProfissional;
 
     private String nomeUsuarioProfissional;
@@ -36,36 +26,6 @@ public class ChatDTO {
     private LocalDateTime dataFechamento;
 
     public ChatDTO() {
-
-    }
-
-    public ChatDTO(Chat chat) {
-
-        this.id = chat.getId();
-        this.idNecessidade = chat.getNecessidade().getId();
-        this.nomeNecessidade = chat.getNecessidade().getNome();
-        this.idUsuarioAbertura = chat.getUsuarioAbertura().getId();
-        this.nomeUsuarioAbertura = chat.getUsuarioAbertura().getNomeCompleto();
-        Optional.ofNullable(chat.getUsuarioProfissional()).ifPresent(u -> {
-            this.idUsuarioProfissional = u.getId();
-            this.nomeUsuarioProfissional = u.getNomeCompleto();
-        });
-        this.dataAbertura = chat.getDataAbertura();
-        this.dataFechamento = chat.getDataFechamento();
-
-    }
-
-    public Chat toChat() {
-
-        Chat chat = new Chat();
-        chat.setDataAbertura(this.getDataAbertura());
-        chat.setDataFechamento(this.getDataFechamento());
-        chat.setId(this.getId());
-        chat.setNecessidade(new Necessidade(this.getIdNecessidade()));
-        chat.setUsuarioAbertura(new Usuario(this.getIdUsuarioAbertura()));
-        Optional.ofNullable(this.getIdUsuarioProfissional()).ifPresent(
-                idUsuarioProfissional -> chat.setUsuarioProfissional(new Profissional(idUsuarioProfissional)));
-        return chat;
 
     }
 
@@ -91,22 +51,6 @@ public class ChatDTO {
 
     public void setNomeNecessidade(String nomeNecessidade) {
         this.nomeNecessidade = nomeNecessidade;
-    }
-
-    public Long getIdUsuarioAbertura() {
-        return idUsuarioAbertura;
-    }
-
-    public void setIdUsuarioAbertura(Long idUsuarioAbertura) {
-        this.idUsuarioAbertura = idUsuarioAbertura;
-    }
-
-    public String getNomeUsuarioAbertura() {
-        return nomeUsuarioAbertura;
-    }
-
-    public void setNomeUsuarioAbertura(String nomeUsuarioAbertura) {
-        this.nomeUsuarioAbertura = nomeUsuarioAbertura;
     }
 
     public Long getIdUsuarioProfissional() {

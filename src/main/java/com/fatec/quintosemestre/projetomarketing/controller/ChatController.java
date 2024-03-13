@@ -62,7 +62,7 @@ public class ChatController {
         return service.listarPorId(id);
     }
 
-    @GetMapping("/usuario-abertura/{idUsuarioAbertura}")
+    @GetMapping("/meus-chats")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Sucesso (OK)", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = ChatDTO.class)) }),
@@ -70,8 +70,20 @@ public class ChatController {
             @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
             @ApiResponse(responseCode = "500", description = "Erro Interno (Internal Server Error)")
     })
-    public ResponseEntity<Object> listarPorUsuarioAbertura(@PathVariable Long idUsuarioAbertura) throws Exception {
-        return service.listarPorUsuarioAbertura(idUsuarioAbertura);
+    public ResponseEntity<Object> listarPorUsuarioAbertura() throws Exception {
+        return service.listarPorUsuarioAbertura();
+    }
+
+    @GetMapping("/necessidade/{idNecessidade}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso (OK)", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ChatDTO.class)) }),
+            @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
+            @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno (Internal Server Error)")
+    })
+    public ResponseEntity<Object> listarPorUsuarioAbertura(@PathVariable Long idNecessidade) throws Exception {
+        return service.listarPorNecessidade(idNecessidade);
     }
     
     @PutMapping("/{id}")
@@ -84,6 +96,18 @@ public class ChatController {
     })
     public ResponseEntity<Object> editar(@PathVariable Long id, @RequestBody @Valid ChatDTO dto) throws Exception {
         return service.editar(id, dto);
+    }
+
+    @PutMapping("/finalizar-ou-reabrir/{id}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso (OK)", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ChatDTO.class)) }),
+            @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
+            @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno (Internal Server Error)")
+    })
+    public ResponseEntity<Object> finalizarOuReabrirChat(@PathVariable Long id) throws Exception {
+        throw new UnsupportedOperationException("Método não suportado");
     }
 
 }
