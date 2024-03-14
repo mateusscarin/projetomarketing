@@ -1,4 +1,4 @@
-package com.fatec.quintosemestre.projetomarketing.model.dto;
+package com.fatec.quintosemestre.projetomarketing.model.dto.openai;
 
 import java.util.List;
 
