@@ -22,9 +22,9 @@ public class WebSocketController {
     @SendTo("/topic/chat/{chatId}")
     public Object handleMessage(@DestinationVariable String chatId, @RequestBody Map<String, Object> object) throws Exception {
         Map<String, Object> result = new HashMap<>();
-        String response = openAiService.responder((String) object.get("message"));
-        result.put("message", response);
-        result.put("from", "professional");
+        // String response = openAiService.responder((String) object.get("message"));
+        result.put("message", "sua mensagem foi recebida");
+        result.put("from", "assistant");
         return result;
     }
 
