@@ -36,7 +36,16 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+
 @Configuration
+@SecurityScheme(type = SecuritySchemeType.HTTP, name = "Bearer Authentication", scheme = "bearer", bearerFormat = "JWT", in = SecuritySchemeIn.HEADER)
+@OpenAPIDefinition(security = @SecurityRequirement(name = "Bearer Authentication"), info = @Info(title = "API UAI v1.0"))
 public class JwtSecurityConfig {
 
     @Value("${jwt.public.key}")
@@ -49,12 +58,17 @@ public class JwtSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/administrador", "/administrador/**", "/chat/finalizar-ou-reabrir/**", "/chat/necessidade/**").hasAnyAuthority("SCOPE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/casual", "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/chats/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/necessidade").hasAnyAuthority("SCOPE_ADMIN")
                         .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("SCOPE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/necessidade/**").hasAnyAuthority("SCOPE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**", "/live-chat/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/chat").hasAnyAuthority("SCOPE_ADMIN")
                         .anyRequest().authenticated())
                 .cors((cors) -> corsConfigurationSource())
                 .csrf((csrf) -> csrf.disable())
+                .cors((cors) -> corsConfigurationSource())
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer((oauth2ResourceServer) -> oauth2ResourceServer.jwt(Customizer.withDefaults()))
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

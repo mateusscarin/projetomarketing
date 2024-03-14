@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -63,6 +64,21 @@ public class ControllerExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ApiResponse<>(ex.getMostSpecificCause().getMessage(), request.getRequestURI()));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Object> tratarErrosDeCorpoDeRequisicao(HttpMessageNotReadableException ex,
+            HttpServletRequest request) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse<>(ex.getMostSpecificCause().getMessage(), request.getRequestURI()));
+    }
+
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<Object> tratarErrosDeMetodosNaoSuportados(UnsupportedOperationException ex,
+            HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+                .body(new ApiResponse<>(ex.getMessage(), request.getRequestURI()));
     }
 
 }
