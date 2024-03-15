@@ -1,7 +1,9 @@
 package com.fatec.quintosemestre.projetomarketing.service;
 
+import com.fatec.quintosemestre.projetomarketing.model.Chat;
+
 public interface MyOpenAiService {
     
-    public String responder(String prompt);
+    public void responder(Chat idChat, String prompt);
 
 }

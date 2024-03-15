@@ -2,6 +2,8 @@ package com.fatec.quintosemestre.projetomarketing.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +13,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import com.fatec.quintosemestre.projetomarketing.model.enumerated.OrigemMensagem;
 
 @Entity
 public class Mensagem {
@@ -27,6 +31,14 @@ public class Mensagem {
     @NotBlank
     @NotNull
     private String texto;
+
+    @Column(name = "origem_mensagem")
+    @NotNull(message = "A origem da mensagem deve ser informada!")
+    @Enumerated(EnumType.STRING)
+    private OrigemMensagem origemMensagem;
+
+    public Mensagem() {
+    }
 
     public Long getId() {
         return id;
@@ -52,7 +64,12 @@ public class Mensagem {
         this.texto = texto;
     }
 
-    public Mensagem() {
+    public OrigemMensagem getOrigemMensagem() {
+        return origemMensagem;
+    }
+
+    public void setOrigemMensagem(OrigemMensagem origemMensagem) {
+        this.origemMensagem = origemMensagem;
     }
 
     @PrePersist

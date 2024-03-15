@@ -91,7 +91,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ResponseEntity<Object> listarPorUsuarioAbertura() {
+    public ResponseEntity<Object> listarPorUsuarioAbertura() throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
@@ -108,7 +108,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ResponseEntity<Object> listarPorNecessidade(Long idNecessidade) {
+    public ResponseEntity<Object> listarPorNecessidade(Long idNecessidade) throws Exception {
         List<ChatDTO> chats = chatMapper.converterParaListaDeDtos(
                 chatRepository.findByNecessidadeId(idNecessidade));
         if (chats.isEmpty()) {
@@ -120,7 +120,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ResponseEntity<Object> finalizarOuReabrirChat(Long idChat) {
+    public ResponseEntity<Object> finalizarOuReabrirChat(Long idChat) throws Exception {
 
         Chat paraFinalizar = chatRepository.findById(idChat)
                 .orElseThrow(() -> new NoSuchElementException("O chat com ID " + idChat + " não foi encontrado!"));
@@ -137,7 +137,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ResponseEntity<Object> atenderChat(Long idChat) {
+    public ResponseEntity<Object> atenderChat(Long idChat) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();

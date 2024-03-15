@@ -2,7 +2,7 @@
 package com.fatec.quintosemestre.projetomarketing.service.impl;
 
 import com.fatec.quintosemestre.projetomarketing.model.Mensagem;
-import com.fatec.quintosemestre.projetomarketing.model.dto.MensagenDTO;
+import com.fatec.quintosemestre.projetomarketing.model.dto.MensagemDTO;
 import com.fatec.quintosemestre.projetomarketing.repository.MensagemRepository;
 import com.fatec.quintosemestre.projetomarketing.service.MensagemService;
 import com.fatec.quintosemestre.projetomarketing.service.util.ApiResponse;
@@ -22,7 +22,7 @@ public class MensagemServiceImpl implements MensagemService {
     private MensagemRepository mensagemRepository;
 
     @Override
-    public ResponseEntity<Object> cadastrar(MensagenDTO objeto) throws Exception {
+    public ResponseEntity<Object> cadastrar(MensagemDTO objeto) throws Exception {
         Mensagem mensagem = new Mensagem();
         BeanUtils.copyProperties(objeto, mensagem, "id");
         Mensagem objetoCriado = mensagemRepository.saveAndFlush(mensagem);
@@ -47,7 +47,7 @@ public class MensagemServiceImpl implements MensagemService {
     }
 
     @Override
-    public ResponseEntity<Object> editar(Long idObjeto, MensagenDTO objeto) throws Exception {
+    public ResponseEntity<Object> editar(Long idObjeto, MensagemDTO objeto) throws Exception {
         Mensagem aEditar = mensagemRepository.findById(idObjeto)
                 .orElseThrow(
                         () -> new NoSuchElementException("A mensagem com ID " + idObjeto + " não foi encontrada!"));

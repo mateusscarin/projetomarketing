@@ -3,7 +3,10 @@ package com.fatec.quintosemestre.projetomarketing.model.dto;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fatec.quintosemestre.projetomarketing.model.enumerated.TipoAssistente;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 
 public class ChatDTO {
@@ -24,6 +27,10 @@ public class ChatDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataFechamento;
+
+    @NotNull(message = "O tipo de assistente deve ser informado!")
+    @Enumerated(EnumType.STRING)
+    private TipoAssistente tipoAssistente;
 
     public ChatDTO() {
 
@@ -83,6 +90,14 @@ public class ChatDTO {
 
     public void setDataFechamento(LocalDateTime dataFechamento) {
         this.dataFechamento = dataFechamento;
+    }
+
+    public TipoAssistente getTipoAssistente() {
+        return tipoAssistente;
+    }
+
+    public void setTipoAssistente(TipoAssistente tipoAssistente) {
+        this.tipoAssistente = tipoAssistente;
     }
 
 }

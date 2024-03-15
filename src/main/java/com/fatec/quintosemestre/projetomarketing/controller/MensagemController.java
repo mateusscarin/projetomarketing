@@ -1,6 +1,6 @@
 package com.fatec.quintosemestre.projetomarketing.controller;
 
-import com.fatec.quintosemestre.projetomarketing.model.dto.MensagenDTO;
+import com.fatec.quintosemestre.projetomarketing.model.dto.MensagemDTO;
 import com.fatec.quintosemestre.projetomarketing.service.MensagemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class MensagemController {
     private MensagemService service;
 
     @PostMapping
-    public ResponseEntity<Object> cadastrar(@RequestBody @Valid MensagenDTO dto) throws Exception {
+    public ResponseEntity<Object> cadastrar(@RequestBody @Valid MensagemDTO dto) throws Exception {
         return service.cadastrar(dto);
     }
 
@@ -36,7 +36,7 @@ public class MensagemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> editar(@PathVariable Long id, @RequestBody @Valid MensagenDTO dto) throws Exception {
+    public ResponseEntity<Object> editar(@PathVariable Long id, @RequestBody @Valid MensagemDTO dto) throws Exception {
         return service.editar(id, dto);
     }
     
