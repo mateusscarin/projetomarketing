@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.NotBlank;
@@ -19,7 +21,15 @@ public class Mensagem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
-
+    
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Chat chat;
+        
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Usuario usuario;
+    
     @Column(name = "data_de_envio")
     private LocalDateTime dataDeEnvio;
 
@@ -27,6 +37,22 @@ public class Mensagem {
     @NotBlank
     @NotNull
     private String texto;
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
     public Long getId() {
         return id;
