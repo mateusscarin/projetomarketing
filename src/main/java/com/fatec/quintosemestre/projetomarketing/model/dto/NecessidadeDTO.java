@@ -5,8 +5,10 @@
 package com.fatec.quintosemestre.projetomarketing.model.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -26,6 +28,9 @@ public class NecessidadeDTO {
     @NotBlank(message = "O nome completo não pode estar em branco!")
     private String descricao;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dataCriacao;
+    
     public NecessidadeDTO() {
     }
 
@@ -33,6 +38,7 @@ public class NecessidadeDTO {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
+        this.dataCriacao = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -57,6 +63,14 @@ public class NecessidadeDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
     
     

@@ -11,6 +11,7 @@ import com.fatec.quintosemestre.projetomarketing.service.NecessidadeService;
 import com.fatec.quintosemestre.projetomarketing.service.util.ApiResponse;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,11 @@ public class NecessidadeServiceImpl implements NecessidadeService {
 
     @Override
     public ResponseEntity<Object> cadastrar(NecessidadeDTO objeto) throws Exception {
+
+        if (necessidadeRepository.existsByNome(objeto.getNome())) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>("Não é possível cadastrar a necessidade. Já existe outra necessidade com o mesmo nome."));
+        }
+
         Necessidade necessidade = new Necessidade();
         necessidade.setNome(objeto.getNome());
         necessidade.setDescricao(objeto.getDescricao());
@@ -57,8 +63,15 @@ public class NecessidadeServiceImpl implements NecessidadeService {
 
     @Override
     public ResponseEntity<Object> editar(Long idObjeto, NecessidadeDTO objeto) throws Exception {
+
         Necessidade paraEditar = necessidadeRepository.findById(idObjeto)
                 .orElseThrow(() -> new NoSuchElementException("A necessidade com ID " + idObjeto + " não foi encontrada!"));
+
+        Optional<Necessidade> opt = necessidadeRepository.findByNome(objeto.getNome());
+        if (opt.isPresent() && !opt.get().getId().equals(idObjeto)) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>("Não é possível cadastrar a necessidade. Já existe outra necessidade com o mesmo nome."));
+        }
+
         BeanUtils.copyProperties(objeto, paraEditar, "id");
         Necessidade objetoAtualizado = necessidadeRepository.saveAndFlush(paraEditar);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(objetoAtualizado));
