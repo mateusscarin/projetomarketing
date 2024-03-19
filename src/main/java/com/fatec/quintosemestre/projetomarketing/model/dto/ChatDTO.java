@@ -4,11 +4,16 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class ChatDTO {
 
     private Long id;
+
+    @NotNull(message = "O título do chat precisa ser informado")
+    @NotBlank(message = "O título do chat não pode ser em branco!")
+    private String titulo;
 
     @NotNull(message = "o ID da necessidade precisa ser informado para a abertura do chat!")
     private Long idNecessidade;
@@ -83,6 +88,14 @@ public class ChatDTO {
 
     public void setDataFechamento(LocalDateTime dataFechamento) {
         this.dataFechamento = dataFechamento;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
 }
