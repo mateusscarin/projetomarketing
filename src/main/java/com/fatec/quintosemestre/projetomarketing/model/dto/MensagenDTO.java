@@ -13,11 +13,14 @@ public class MensagenDTO {
 
     private Long id;
     
+    @NotNull(message="O id do do chat precisar ser informado para que a mensagem seja vinculada ao respectivo chat!")
+    private Long idChat;
     
-    private Chat chat;
+    @NotNull(message= "O id do usuario precisar ser informado para que a mensagem seja vinculada a um usuario!")
+    private Long idUsuario;
     
-    private Usuario usuario;
-
+    private String nomeUsuario;
+    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataDeEnvio;
 
@@ -49,20 +52,28 @@ public class MensagenDTO {
         this.texto = texto;
     }
 
-    public Chat getChat() {
-        return chat;
+    public Long getIdChat() {
+        return idChat;
     }
 
-    public void setChat(Chat chat) {
-        this.chat = chat;
+    public void setIdChat(Long idChat) {
+        this.idChat = idChat;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Long getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
 }

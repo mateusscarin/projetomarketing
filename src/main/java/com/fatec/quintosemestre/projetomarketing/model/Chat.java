@@ -42,7 +42,10 @@ public class Chat {
     private LocalDateTime dataFechamento;
 
     public Chat() {
-
+    
+    }
+    public Chat(Long id){
+        this.id = id;
     }
 
     public Long getId() {

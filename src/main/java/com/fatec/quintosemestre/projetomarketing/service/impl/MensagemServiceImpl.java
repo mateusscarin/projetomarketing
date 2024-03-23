@@ -1,6 +1,6 @@
-
 package com.fatec.quintosemestre.projetomarketing.service.impl;
 
+import com.fatec.quintosemestre.projetomarketing.mapper.CustomObjectMapper;
 import com.fatec.quintosemestre.projetomarketing.model.Mensagem;
 import com.fatec.quintosemestre.projetomarketing.model.dto.MensagenDTO;
 import com.fatec.quintosemestre.projetomarketing.repository.MensagemRepository;
@@ -17,27 +17,30 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Service
 public class MensagemServiceImpl implements MensagemService {
-    
+
     @Autowired
     private MensagemRepository mensagemRepository;
 
+    @Autowired
+    private CustomObjectMapper<Mensagem, MensagenDTO> mensagemMapper;
+
     @Override
     public ResponseEntity<Object> cadastrar(MensagenDTO objeto) throws Exception {
-        Mensagem mensagem = new Mensagem();
-        BeanUtils.copyProperties(objeto, mensagem, "id");
-        Mensagem objetoCriado = mensagemRepository.saveAndFlush(mensagem);
+        Mensagem mensagem = mensagemMapper.converterParaEntidade(objeto);
+
+        mensagemRepository.saveAndFlush(mensagem);
         return ResponseEntity.created(
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
                         .path("/{id}")
-                        .buildAndExpand(objetoCriado.getId())
+                        .buildAndExpand(mensagem.getId())
                         .toUri())
                 .build();
     }
 
     @Override
     public ResponseEntity<Object> listar() throws Exception {
-        List<Mensagem> mensagem = mensagemRepository.findAll();
+        List<MensagenDTO> mensagem = mensagemMapper.converterParaListaDeDtos(mensagemRepository.findAll());
         if (mensagem.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>("Não existem mensagem cadastradas no sistema!"));
@@ -48,12 +51,13 @@ public class MensagemServiceImpl implements MensagemService {
 
     @Override
     public ResponseEntity<Object> editar(Long idObjeto, MensagenDTO objeto) throws Exception {
+        Mensagem dadosDto = mensagemMapper.converterParaEntidade(objeto);
         Mensagem aEditar = mensagemRepository.findById(idObjeto)
                 .orElseThrow(
                         () -> new NoSuchElementException("A mensagem com ID " + idObjeto + " não foi encontrada!"));
-        BeanUtils.copyProperties(objeto, aEditar, "id");
-        Mensagem objetoAtualizado = mensagemRepository.saveAndFlush(aEditar);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(objetoAtualizado));
+        BeanUtils.copyProperties(dadosDto, aEditar, "id");
+        mensagemRepository.saveAndFlush(aEditar);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(mensagemMapper.converterParaDto(aEditar)));
     }
 
     @Override
@@ -61,7 +65,7 @@ public class MensagemServiceImpl implements MensagemService {
         Mensagem mensagem = mensagemRepository.findById(idObjeto)
                 .orElseThrow(
                         () -> new NoSuchElementException("A mensagem com ID " + idObjeto + " não foi encontrada!"));
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(mensagem));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(mensagemMapper.converterParaDto(mensagem)));
     }
 
 }

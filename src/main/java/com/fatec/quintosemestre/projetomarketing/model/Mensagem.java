@@ -22,12 +22,14 @@ public class Mensagem {
     @Column
     private Long id;
     
+    @JoinColumn(nullable = false, name = "id_chat")
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @NotNull(message="O id do do chat precisar ser informado para que a mensagem seja vinculada ao respectivo chat!")
     private Chat chat;
-        
+      
+    @JoinColumn(nullable = false, name="id_usuario")
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @NotNull(message="O id do usuario precisar ser informado para que a mensagem seja vinculada a um usuario")
     private Usuario usuario;
     
     @Column(name = "data_de_envio")
