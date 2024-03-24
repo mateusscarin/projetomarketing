@@ -33,7 +33,6 @@ public class Mensagem {
       
     @JoinColumn(nullable = false, name="id_usuario")
     @ManyToOne
-    @NotNull(message="O id do usuario precisar ser informado para que a mensagem seja vinculada a um usuario")
     private Usuario usuario;
     
     @Column(name = "data_de_envio")
