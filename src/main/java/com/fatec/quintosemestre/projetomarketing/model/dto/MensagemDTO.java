@@ -5,15 +5,23 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fatec.quintosemestre.projetomarketing.model.enumerated.OrigemMensagem;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class MensagemDTO {
 
     private Long id;
+
+    @NotNull(message = "O id do do chat precisar ser informado para que a mensagem seja vinculada ao respectivo chat!")
+    private Long idChat;
+
+    @NotNull(message = "O id do usuario precisar ser informado para que a mensagem seja vinculada a um usuario!")
+    private Long idUsuario;
+
+    private String nomeUsuario;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(type = "string", pattern = "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$", example = "2024-01-01 12:00:00")
@@ -57,6 +65,30 @@ public class MensagemDTO {
 
     public void setOrigemMensagem(OrigemMensagem origemMensagem) {
         this.origemMensagem = origemMensagem;
+    }
+
+    public Long getIdChat() {
+        return idChat;
+    }
+
+    public void setIdChat(Long idChat) {
+        this.idChat = idChat;
+    }
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
 }

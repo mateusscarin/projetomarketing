@@ -51,7 +51,10 @@ public class Chat {
     private TipoAssistente tipoAssistente;
 
     public Chat() {
-
+    
+    }
+    public Chat(Long id){
+        this.id = id;
     }
 
     public Long getId() {
