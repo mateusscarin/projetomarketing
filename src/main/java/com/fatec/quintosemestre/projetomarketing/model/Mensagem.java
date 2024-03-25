@@ -2,6 +2,8 @@ package com.fatec.quintosemestre.projetomarketing.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +15,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import com.fatec.quintosemestre.projetomarketing.model.enumerated.OrigemMensagem;
 
 @Entity
 public class Mensagem {
@@ -27,9 +31,8 @@ public class Mensagem {
     @NotNull(message="O id do do chat precisar ser informado para que a mensagem seja vinculada ao respectivo chat!")
     private Chat chat;
       
-    @JoinColumn(nullable = false, name="id_usuario")
+    @JoinColumn(name="id_usuario")
     @ManyToOne
-    @NotNull(message="O id do usuario precisar ser informado para que a mensagem seja vinculada a um usuario")
     private Usuario usuario;
     
     @Column(name = "data_de_envio")
@@ -39,6 +42,15 @@ public class Mensagem {
     @NotBlank
     @NotNull
     private String texto;
+
+    @Column(name = "origem_mensagem")
+    @NotNull(message = "A origem da mensagem deve ser informada!")
+    @Enumerated(EnumType.STRING)
+    private OrigemMensagem origemMensagem;
+
+    public Mensagem() {
+
+    }
 
     public Chat getChat() {
         return chat;
@@ -80,7 +92,12 @@ public class Mensagem {
         this.texto = texto;
     }
 
-    public Mensagem() {
+    public OrigemMensagem getOrigemMensagem() {
+        return origemMensagem;
+    }
+
+    public void setOrigemMensagem(OrigemMensagem origemMensagem) {
+        this.origemMensagem = origemMensagem;
     }
 
     @PrePersist

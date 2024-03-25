@@ -7,13 +7,13 @@ import com.fatec.quintosemestre.projetomarketing.service.util.CrudService;
 
 public interface ChatService extends CrudService<ChatDTO> {
 
-    ResponseEntity<Object> listarPorUsuarioAbertura();
+    ResponseEntity<Object> listarPorUsuarioAbertura() throws Exception;
 
-    ResponseEntity<Object> listarPorNecessidade(Long idNecessidade);
+    ResponseEntity<Object> listarPorNecessidade(Long idNecessidade) throws Exception;
 
-    ResponseEntity<Object> finalizarOuReabrirChat(Long idChat);
+    ResponseEntity<Object> finalizarOuReabrirChat(Long idChat) throws Exception;
 
-    ResponseEntity<Object> atenderChat(Long idChat);
+    ResponseEntity<Object> atenderChat(Long idChat) throws Exception;
 
 
 }
