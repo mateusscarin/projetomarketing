@@ -73,5 +73,4 @@ public class NecessidadeDTO {
         this.dataCriacao = dataCriacao;
     }
     
-    
 }

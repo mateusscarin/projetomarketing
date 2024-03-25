@@ -62,6 +62,8 @@ public class JwtSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/casual", "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/necessidade").hasAnyAuthority("SCOPE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/necessidade/**").hasAnyAuthority("SCOPE_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/bot").hasAnyAuthority("SCOPE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/bot/**").hasAnyAuthority("SCOPE_ADMIN")
                         .requestMatchers(HttpMethod.GET, "/chat").hasAnyAuthority("SCOPE_ADMIN")
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
