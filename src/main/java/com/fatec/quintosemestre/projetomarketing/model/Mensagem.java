@@ -2,15 +2,21 @@ package com.fatec.quintosemestre.projetomarketing.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import com.fatec.quintosemestre.projetomarketing.model.enumerated.OrigemMensagem;
 
 @Entity
 public class Mensagem {
@@ -19,7 +25,16 @@ public class Mensagem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
-
+    
+    @JoinColumn(nullable = false, name = "id_chat")
+    @ManyToOne
+    @NotNull(message="O id do do chat precisar ser informado para que a mensagem seja vinculada ao respectivo chat!")
+    private Chat chat;
+      
+    @JoinColumn(name="id_usuario")
+    @ManyToOne
+    private Usuario usuario;
+    
     @Column(name = "data_de_envio")
     private LocalDateTime dataDeEnvio;
 
@@ -27,6 +42,31 @@ public class Mensagem {
     @NotBlank
     @NotNull
     private String texto;
+
+    @Column(name = "origem_mensagem")
+    @NotNull(message = "A origem da mensagem deve ser informada!")
+    @Enumerated(EnumType.STRING)
+    private OrigemMensagem origemMensagem;
+
+    public Mensagem() {
+
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
     public Long getId() {
         return id;
@@ -52,7 +92,12 @@ public class Mensagem {
         this.texto = texto;
     }
 
-    public Mensagem() {
+    public OrigemMensagem getOrigemMensagem() {
+        return origemMensagem;
+    }
+
+    public void setOrigemMensagem(OrigemMensagem origemMensagem) {
+        this.origemMensagem = origemMensagem;
     }
 
     @PrePersist
