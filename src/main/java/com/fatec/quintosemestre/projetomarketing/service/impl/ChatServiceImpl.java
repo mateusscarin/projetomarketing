@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -77,6 +78,16 @@ public class ChatServiceImpl implements ChatService {
         Chat dadosDto = chatMapper.converterParaEntidade(objeto);
         Chat paraEditar = chatRepository.findById(idObjeto)
                 .orElseThrow(() -> new NoSuchElementException("O chat com ID " + idObjeto + " não foi encontrado!"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt token = (Jwt) authentication.getPrincipal();
+        Usuario usuarioLogado = usuarioRepository.findByCpf(token.getClaimAsString("principal")).get();
+
+        // Se um usuário tentar editar um chat que não foi aberto por ele, lançar um erro
+        if(!paraEditar.getUsuarioAbertura().equals(usuarioLogado)) {
+            throw new BadCredentialsException("Operação não autorizada");
+        }
+
         BeanUtils.copyProperties(dadosDto, paraEditar, "id", "usuarioAbertura", "usuarioProfissional", "dataAbertura",
                 "dataFechamento");
         chatRepository.saveAndFlush(paraEditar);
@@ -91,7 +102,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ResponseEntity<Object> listarPorUsuarioAbertura() {
+    public ResponseEntity<Object> listarPorUsuarioAbertura() throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
@@ -108,7 +119,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ResponseEntity<Object> listarPorNecessidade(Long idNecessidade) {
+    public ResponseEntity<Object> listarPorNecessidade(Long idNecessidade) throws Exception {
         List<ChatDTO> chats = chatMapper.converterParaListaDeDtos(
                 chatRepository.findByNecessidadeId(idNecessidade));
         if (chats.isEmpty()) {
@@ -120,7 +131,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ResponseEntity<Object> finalizarOuReabrirChat(Long idChat) {
+    public ResponseEntity<Object> finalizarOuReabrirChat(Long idChat) throws Exception {
 
         Chat paraFinalizar = chatRepository.findById(idChat)
                 .orElseThrow(() -> new NoSuchElementException("O chat com ID " + idChat + " não foi encontrado!"));
@@ -137,7 +148,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ResponseEntity<Object> atenderChat(Long idChat) {
+    public ResponseEntity<Object> atenderChat(Long idChat) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
