@@ -31,7 +31,7 @@ public class Mensagem {
     @NotNull(message="O id do do chat precisar ser informado para que a mensagem seja vinculada ao respectivo chat!")
     private Chat chat;
       
-    @JoinColumn(nullable = false, name="id_usuario")
+    @JoinColumn(name="id_usuario")
     @ManyToOne
     private Usuario usuario;
     

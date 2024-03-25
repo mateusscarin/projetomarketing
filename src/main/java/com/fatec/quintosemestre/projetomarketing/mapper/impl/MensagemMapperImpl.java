@@ -2,12 +2,14 @@ package com.fatec.quintosemestre.projetomarketing.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
 import com.fatec.quintosemestre.projetomarketing.mapper.CustomObjectMapper;
 import com.fatec.quintosemestre.projetomarketing.model.Chat;
 import com.fatec.quintosemestre.projetomarketing.model.Mensagem;
+import com.fatec.quintosemestre.projetomarketing.model.Usuario;
 import com.fatec.quintosemestre.projetomarketing.model.dto.MensagemDTO;
 
 /**
@@ -37,6 +39,7 @@ public class MensagemMapperImpl implements CustomObjectMapper<Mensagem, Mensagem
         mensagem.setChat(new Chat(dto.getIdChat()));
         mensagem.setTexto(dto.getTexto());
         mensagem.setOrigemMensagem(dto.getOrigemMensagem());
+        Optional.ofNullable(dto.getIdUsuario()).ifPresent(idUsuario -> mensagem.setUsuario(new Usuario(idUsuario)));
 
         return mensagem;
     }

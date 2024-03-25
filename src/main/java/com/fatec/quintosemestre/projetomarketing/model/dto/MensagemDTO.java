@@ -18,6 +18,8 @@ public class MensagemDTO {
     @NotNull(message = "O id do do chat precisar ser informado para que a mensagem seja vinculada ao respectivo chat!")
     private Long idChat;
 
+    private Long idUsuario;
+
     private String nomeUsuario;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -78,6 +80,14 @@ public class MensagemDTO {
 
     public void setNomeUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
+    }
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
 }
