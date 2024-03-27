@@ -121,15 +121,8 @@ public class BotServiceImpl implements BotService {
     public ResponseEntity<Object> mudancaStatus(Long id) {
         Bot bot = botRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("O bot com ID " + id + " não foi encontrada!"));
-
-        if (bot.isAtivo()) {
-            bot.setAtivo(false);
-        } else {
-            bot.setAtivo(true);
-        }
-
+        bot.setAtivo(!bot.isAtivo());
         Bot botAtualizado = botRepository.saveAndFlush(bot);
-
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(botMapper.converterParaDto(botAtualizado)));
     }
 
