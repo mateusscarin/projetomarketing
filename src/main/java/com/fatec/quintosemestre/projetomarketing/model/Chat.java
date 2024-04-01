@@ -2,8 +2,12 @@ package com.fatec.quintosemestre.projetomarketing.model;
 
 import java.time.LocalDateTime;
 
+import com.fatec.quintosemestre.projetomarketing.model.enumerated.TipoAssistente;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,8 +45,16 @@ public class Chat {
     @Column(name = "data_fechamento")
     private LocalDateTime dataFechamento;
 
-    public Chat() {
+    @Column(name = "tipo_assistente")
+    @NotNull(message = "O tipo de assistente deve ser informado!")
+    @Enumerated(EnumType.STRING)
+    private TipoAssistente tipoAssistente;
 
+    public Chat() {
+    
+    }
+    public Chat(Long id){
+        this.id = id;
     }
 
     public Long getId() {
@@ -91,6 +103,14 @@ public class Chat {
 
     public void setDataFechamento(LocalDateTime dataFechamento) {
         this.dataFechamento = dataFechamento;
+    }
+
+    public TipoAssistente getTipoAssistente() {
+        return tipoAssistente;
+    }
+
+    public void setTipoAssistente(TipoAssistente tipoAssistente) {
+        this.tipoAssistente = tipoAssistente;
     }
 
     @PrePersist

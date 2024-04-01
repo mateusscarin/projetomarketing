@@ -25,6 +25,7 @@ public class ChatMapperImpl implements CustomObjectMapper<Chat, ChatDTO> {
         dto.setId(entity.getId());
         dto.setIdNecessidade(entity.getNecessidade().getId());
         dto.setNomeNecessidade(entity.getNecessidade().getNome());
+        dto.setTipoAssistente(entity.getTipoAssistente());
         Optional.ofNullable(entity.getUsuarioProfissional()).ifPresent(profissional -> {
             dto.setIdUsuarioProfissional(profissional.getId());
             dto.setNomeUsuarioProfissional(profissional.getNomeCompleto());
@@ -39,6 +40,7 @@ public class ChatMapperImpl implements CustomObjectMapper<Chat, ChatDTO> {
         chat.setDataAbertura(dto.getDataAbertura());
         chat.setDataFechamento(dto.getDataFechamento());
         chat.setNecessidade(new Necessidade(dto.getIdNecessidade()));
+        chat.setTipoAssistente(dto.getTipoAssistente());
         return chat;
 
     }
