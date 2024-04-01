@@ -9,8 +9,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *
@@ -25,7 +28,7 @@ public class Necessidade {
     @Column
     private Long id;
 
-    @Column
+    @Column(unique = true)
     @NotNull
     @NotBlank
     private String nome;
@@ -34,6 +37,9 @@ public class Necessidade {
     @NotNull
     @NotBlank
     private String descricao;
+    
+    @Column
+    private LocalDateTime dataCriacao;
 
     public Necessidade() {
     };
@@ -46,6 +52,7 @@ public class Necessidade {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
+        this.dataCriacao = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -71,5 +78,42 @@ public class Necessidade {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    } 
+    
+    @PrePersist
+    public void prePersist() {
+        dataCriacao = LocalDateTime.now();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Necessidade other = (Necessidade) obj;
+        return Objects.equals(this.id, other.id);
+    }
+    
+    
 
 }
