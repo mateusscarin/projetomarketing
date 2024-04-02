@@ -4,6 +4,16 @@
  */
 package com.fatec.quintosemestre.projetomarketing.service.impl;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.fatec.quintosemestre.projetomarketing.mapper.CustomObjectMapper;
 import com.fatec.quintosemestre.projetomarketing.model.Bot;
 import com.fatec.quintosemestre.projetomarketing.model.Necessidade;
@@ -11,15 +21,6 @@ import com.fatec.quintosemestre.projetomarketing.model.dto.BotDTO;
 import com.fatec.quintosemestre.projetomarketing.repository.BotRepository;
 import com.fatec.quintosemestre.projetomarketing.service.BotService;
 import com.fatec.quintosemestre.projetomarketing.service.util.ApiResponse;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  *

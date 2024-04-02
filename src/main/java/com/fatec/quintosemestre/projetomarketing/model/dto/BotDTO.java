@@ -4,10 +4,11 @@
  */
 package com.fatec.quintosemestre.projetomarketing.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fatec.quintosemestre.projetomarketing.model.Bot;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
