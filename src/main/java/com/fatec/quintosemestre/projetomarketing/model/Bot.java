@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -24,33 +25,36 @@ import java.util.Objects;
 @Entity
 public class Bot {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column 
-   private Long id;
-   
-   
-   @JoinColumn(name = "id_necessidade", unique = true)
-   @OneToOne
-   @NotNull(message = "A necessidade precisa ser informada para a abertura do Bot!")
-   private Necessidade necessidade;
-    
-   @Column 
-   private String modelo;
-  
-   @Column
-   private String mensagemSistema;
-   
-   @Column
-   private boolean ativo;
-   
-   @Column
-   private LocalDateTime dataCriacao;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private Long id;
+
+    @JoinColumn(name = "id_necessidade", unique = true)
+    @OneToOne
+    @NotNull(message = "A necessidade precisa ser informada para a abertura do Bot!")
+    private Necessidade necessidade;
+
+    @Column
+    @NotNull(message = "O modelo precisa ser informado!")
+    @NotBlank(message = "O modelo não pode ser em branco!")
+    private String modelo;
+
+    @Column(name = "mensagem_sistema")
+    @NotNull(message = "A mensagem de configuração do bot deve ser informada!")
+    @NotBlank(message = "A mensagem de configuração do bot não pode ser em branco!")
+    private String mensagemSistema;
+
+    @Column
+    private Boolean ativo;
+
+    @Column(name = "data_criacao")
+    private LocalDateTime dataCriacao;
 
     public Bot() {
     }
 
-    public Bot(Long id, Necessidade necessidade, String modelo, String mensagemSistema, boolean ativo) {
+    public Bot(Long id, Necessidade necessidade, String modelo, String mensagemSistema, Boolean ativo) {
         this.id = id;
         this.necessidade = necessidade;
         this.modelo = modelo;
@@ -91,11 +95,11 @@ public class Bot {
         this.mensagemSistema = mensagemSistema;
     }
 
-    public boolean isAtivo() {
+    public Boolean getAtivo() {
         return ativo;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 
@@ -106,11 +110,11 @@ public class Bot {
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
-   
-   
+
     @PrePersist
     public void prePersist() {
-        dataCriacao = LocalDateTime.now();
+        this.dataCriacao = LocalDateTime.now();
+        this.ativo = true;
     }
 
     @Override
@@ -134,8 +138,5 @@ public class Bot {
         final Bot other = (Bot) obj;
         return Objects.equals(this.id, other.id);
     }
-    
-    
-    
+
 }
- 

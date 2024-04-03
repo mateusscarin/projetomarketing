@@ -4,10 +4,10 @@
  */
 package com.fatec.quintosemestre.projetomarketing.repository;
 
-import com.fatec.quintosemestre.projetomarketing.model.Necessidade;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.fatec.quintosemestre.projetomarketing.model.Necessidade;
 
 /**
  *
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NecessidadeRepository extends JpaRepository<Necessidade, Long>{
     
-   public boolean existsByNome(String nome); 
+   // boolean existsByNome(String nome); 
  
-   public Optional<Necessidade> findByNome(String nome);
+   // Optional<Necessidade> findByNome(String nome);
     
 }

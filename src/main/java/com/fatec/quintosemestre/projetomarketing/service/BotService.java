@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface BotService extends CrudService<BotDTO>{
     
-    ResponseEntity<Object> mudancaStatus(Long id);
+    ResponseEntity<Object> alterarStatus(Long id);
     
     ResponseEntity<Object> listarPorIdNecessidade(Long id);
 
