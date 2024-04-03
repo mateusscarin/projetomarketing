@@ -29,7 +29,7 @@ public class BotMapperImpl implements CustomObjectMapper<Bot, BotDTO>{
         dto.setIdNecessidade(entity.getNecessidade().getId());
         dto.setMensagemSistema(entity.getMensagemSistema());
         dto.setModelo(entity.getModelo());
-        dto.setAtivo(entity.isAtivo());
+        dto.setAtivo(entity.getAtivo());
         dto.setDataCriacao(entity.getDataCriacao());
         
         return dto;
@@ -42,7 +42,7 @@ public class BotMapperImpl implements CustomObjectMapper<Bot, BotDTO>{
         bot.setId(dto.getId());
         bot.setMensagemSistema(dto.getMensagemSistema());
         bot.setModelo(dto.getModelo());
-        bot.setAtivo(dto.isAtivo());
+        bot.setAtivo(dto.getAtivo());
         bot.setDataCriacao(dto.getDataCriacao());
         bot.setNecessidade(new Necessidade(dto.getIdNecessidade()));
         return bot;

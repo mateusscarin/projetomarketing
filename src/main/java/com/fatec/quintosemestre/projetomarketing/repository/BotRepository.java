@@ -4,7 +4,7 @@
  */
 package com.fatec.quintosemestre.projetomarketing.repository;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -22,7 +22,7 @@ public interface BotRepository extends JpaRepository<Bot, Long> {
     //        + " from Bot b")
    // public List<BotDTO> listarPorBotDTO();
 
-    public boolean existsByNecessidadeId(Long idNecessidade);
+    // boolean existsByNecessidadeId(Long idNecessidade);
 
-    public List<Bot> findByNecessidadeId(Long idNecessidade);
+    Optional<Bot> findByNecessidadeId(Long idNecessidade);
 }

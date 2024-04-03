@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatec.quintosemestre.projetomarketing.mapper.CustomObjectMapper;
 import com.fatec.quintosemestre.projetomarketing.model.Bot;
-import com.fatec.quintosemestre.projetomarketing.model.Necessidade;
 import com.fatec.quintosemestre.projetomarketing.model.dto.BotDTO;
 import com.fatec.quintosemestre.projetomarketing.repository.BotRepository;
 import com.fatec.quintosemestre.projetomarketing.service.BotService;
@@ -39,13 +39,9 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public ResponseEntity<Object> listarPorIdNecessidade(Long id) {
-        List<BotDTO> bots = botMapper.converterParaListaDeDtos(botRepository.findByNecessidadeId(id));
-        if (bots.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>("Não existem chats abertos para essa necessidade!"));
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(bots));
-        }
+        Bot entity = botRepository.findByNecessidadeId(id)
+                .orElseThrow(() -> new NoSuchElementException("Não existe um bot cadastrado para essa necessidade!"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(botMapper.converterParaDto(entity)));
     }
 
     @Override
@@ -55,18 +51,12 @@ public class BotServiceImpl implements BotService {
             return ResponseEntity.badRequest().body(new ApiResponse<>("Modelo está incompatível!"));
         }
 
-        if (botRepository.existsByNecessidadeId(objeto.getIdNecessidade())) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>("Necessidade informada já possui Bot cadastrado!"));
-        }
+        // if (botRepository.existsByNecessidadeId(objeto.getIdNecessidade())) {
+        // return ResponseEntity.badRequest().body(new ApiResponse<>("Necessidade
+        // informada já possui Bot cadastrado!"));
+        // }
 
-        Bot bot = new Bot();
-        bot.setModelo(objeto.getModelo());
-        bot.setMensagemSistema(objeto.getMensagemSistema());
-        bot.setAtivo(objeto.isAtivo());
-        Necessidade necessidade = new Necessidade(objeto.getIdNecessidade());
-        bot.setNecessidade(necessidade);
-
-        Bot objetoCriado = botRepository.saveAndFlush(bot);
+        Bot objetoCriado = botRepository.saveAndFlush(botMapper.converterParaEntidade(objeto));
         return ResponseEntity.created(
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
@@ -78,12 +68,12 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public ResponseEntity<Object> listar() throws Exception {
-        //List<BotDTO> botDTOs = botRepository.listarPorBotDTO();
+        // List<BotDTO> botDTOs = botRepository.listarPorBotDTO();
 
         List<BotDTO> botDTOs = botMapper.converterParaListaDeDtos(botRepository.findAll());
         if (botDTOs.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>("Não existe bot cadastrados no sistemas"));
+                    .body(new ApiResponse<>("Não existem bots cadastrados no sistema"));
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(botDTOs));
@@ -94,35 +84,33 @@ public class BotServiceImpl implements BotService {
     public ResponseEntity<Object> editar(Long idObjeto, BotDTO objeto) throws Exception {
         Bot dadosDto = botMapper.converterParaEntidade(objeto);
         Bot paraEditar = botRepository.findById(idObjeto)
-                .orElseThrow(() -> new NoSuchElementException("O bot com ID " + idObjeto + " não foi encontrada!"));
+                .orElseThrow(() -> new NoSuchElementException("O bot com ID " + idObjeto + " não foi encontrado!"));
 
-        List<Bot> bots = botRepository.findByNecessidadeId(objeto.getIdNecessidade());
-        if (!bots.isEmpty()) {
-            for (Bot bot : bots) {
-                if (!bot.getId().equals(idObjeto)) {
-                    return ResponseEntity.badRequest().body(new ApiResponse<>("Necessidade informada já possui Bot cadastrado!"));
-                }
+        botRepository.findByNecessidadeId(objeto.getIdNecessidade()).ifPresent(botExistente -> {
+            if (!botExistente.getId().equals(paraEditar.getId())) {
+                throw new DataIntegrityViolationException("Já existe um bot cadastrado para a necessidade informada!");
             }
-        }
+        });
 
         BeanUtils.copyProperties(dadosDto, paraEditar, "id");
         Bot objetoAtualizado = botRepository.saveAndFlush(paraEditar);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(botMapper.converterParaDto(objetoAtualizado)));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>(botMapper.converterParaDto(objetoAtualizado)));
     }
 
     @Override
     public ResponseEntity<Object> listarPorId(Long idObjeto) throws Exception {
         Bot bot = botRepository.findById(idObjeto)
-                .orElseThrow(() -> new NoSuchElementException("O bot com ID " + idObjeto + " não foi encontrada!"));
+                .orElseThrow(() -> new NoSuchElementException("O bot com ID " + idObjeto + " não foi encontrado!"));
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(botMapper.converterParaDto(bot)));
     }
 
     @Override
-    public ResponseEntity<Object> mudancaStatus(Long id) {
+    public ResponseEntity<Object> alterarStatus(Long id) {
         Bot bot = botRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("O bot com ID " + id + " não foi encontrada!"));
-        bot.setAtivo(!bot.isAtivo());
+                .orElseThrow(() -> new NoSuchElementException("O bot com ID " + id + " não foi encontrado!"));
+        bot.setAtivo(!bot.getAtivo());
         Bot botAtualizado = botRepository.saveAndFlush(bot);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(botMapper.converterParaDto(botAtualizado)));
     }
