@@ -11,5 +11,7 @@ import com.fatec.quintosemestre.projetomarketing.model.Mensagem;
 public interface MensagemRepository extends JpaRepository<Mensagem, Long>{
 
     List<Mensagem> findByUsuarioId(Long idUsuario);
+
+    List<Mensagem> findByChatId(Long idChat);
     
 }
