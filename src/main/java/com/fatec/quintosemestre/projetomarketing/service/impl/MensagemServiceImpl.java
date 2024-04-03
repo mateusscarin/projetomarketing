@@ -11,7 +11,7 @@ import com.fatec.quintosemestre.projetomarketing.repository.ChatRepository;
 import com.fatec.quintosemestre.projetomarketing.repository.MensagemRepository;
 import com.fatec.quintosemestre.projetomarketing.repository.UsuarioRepository;
 import com.fatec.quintosemestre.projetomarketing.service.MensagemService;
-import com.fatec.quintosemestre.projetomarketing.service.MyOpenAiService;
+import com.fatec.quintosemestre.projetomarketing.service.OpenAiService;
 import com.fatec.quintosemestre.projetomarketing.service.util.ApiResponse;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class MensagemServiceImpl implements MensagemService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private MyOpenAiService openAiService;
+    private OpenAiService openAiService;
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
