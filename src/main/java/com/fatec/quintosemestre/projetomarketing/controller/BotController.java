@@ -4,13 +4,6 @@
  */
 package com.fatec.quintosemestre.projetomarketing.controller;
 
-import com.fatec.quintosemestre.projetomarketing.model.dto.NecessidadeDTO;
-import com.fatec.quintosemestre.projetomarketing.service.NecessidadeService;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,33 +14,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fatec.quintosemestre.projetomarketing.model.dto.BotDTO;
+import com.fatec.quintosemestre.projetomarketing.service.BotService;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+
 /**
  *
  * @author Carlos Fernandes
  */
 @RestController
-@RequestMapping(value = "/necessidade")
-public class NecessidadeController {
+@RequestMapping(value = "/bot")
+public class BotController {
 
     @Autowired
-    private NecessidadeService service;
+    private BotService service;
 
     @PostMapping
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Criado (Created)", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = NecessidadeDTO.class))}),
+            @Content(mediaType = "application/json", schema = @Schema(implementation = BotDTO.class))}),
         @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
         @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
         @ApiResponse(responseCode = "500", description = "Erro interno (Internal Server Error)")
     })
-    public ResponseEntity<Object> cadastrar(@RequestBody @Valid NecessidadeDTO dto) throws Exception {
+    public ResponseEntity<Object> cadastrar(@RequestBody @Valid BotDTO dto) throws Exception {
         return service.cadastrar(dto);
     }
 
     @GetMapping
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Criado (Created)", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = NecessidadeDTO.class))}),
+            @Content(mediaType = "application/json", schema = @Schema(implementation = BotDTO.class))}),
         @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
         @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
         @ApiResponse(responseCode = "500", description = "Erro interno (Internal Server Error)")
@@ -59,7 +61,7 @@ public class NecessidadeController {
     @GetMapping("/{id}")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Criado (Created)", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = NecessidadeDTO.class))}),
+            @Content(mediaType = "application/json", schema = @Schema(implementation = BotDTO.class))}),
         @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
         @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
         @ApiResponse(responseCode = "500", description = "Erro interno (Internal Server Error)")
@@ -71,13 +73,36 @@ public class NecessidadeController {
     @PutMapping("/{id}")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Criado (Created)", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = NecessidadeDTO.class))}),
+            @Content(mediaType = "application/json", schema = @Schema(implementation = BotDTO.class))}),
         @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
         @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
         @ApiResponse(responseCode = "500", description = "Erro interno (Internal Server Error)")
     })
-    public ResponseEntity<Object> editar(@PathVariable Long id, @RequestBody @Valid NecessidadeDTO dto) throws Exception {
+    public ResponseEntity<Object> editar(@PathVariable Long id, @RequestBody @Valid BotDTO dto) throws Exception {
         return service.editar(id, dto);
     }
 
+    @GetMapping("/necessidade/{idNecessidade}")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Criado (Created)", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = BotDTO.class))}),
+        @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
+        @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
+        @ApiResponse(responseCode = "500", description = "Erro interno (Internal Server Error)")
+    })
+    public ResponseEntity<Object> listarPorNecessidade(@PathVariable Long id) throws Exception {
+        return service.listarPorIdNecessidade(id);
+    }
+
+    @PutMapping("/{id}/status")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Criado (Created)", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = BotDTO.class))}),
+        @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
+        @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
+        @ApiResponse(responseCode = "500", description = "Erro interno (Internal Server Error)")
+    })
+    public ResponseEntity<Object> alterarStatus(@PathVariable Long id) throws Exception {
+        return service.alterarStatus(id);
+    }
 }

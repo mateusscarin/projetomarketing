@@ -10,17 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fatec.quintosemestre.projetomarketing.mapper.CustomObjectMapper;
+import com.fatec.quintosemestre.projetomarketing.model.Bot;
 import com.fatec.quintosemestre.projetomarketing.model.Chat;
 import com.fatec.quintosemestre.projetomarketing.model.Mensagem;
 import com.fatec.quintosemestre.projetomarketing.model.dto.MensagemDTO;
 import com.fatec.quintosemestre.projetomarketing.model.dto.openai.ChatRequestDTO;
 import com.fatec.quintosemestre.projetomarketing.model.dto.openai.ChatResponseDTO;
 import com.fatec.quintosemestre.projetomarketing.model.enumerated.OrigemMensagem;
+import com.fatec.quintosemestre.projetomarketing.repository.BotRepository;
 import com.fatec.quintosemestre.projetomarketing.repository.MensagemRepository;
-import com.fatec.quintosemestre.projetomarketing.service.MyOpenAiService;
+import com.fatec.quintosemestre.projetomarketing.service.OpenAiService;
 
 @Service
-public class OpenAiServiceImpl implements MyOpenAiService {
+public class OpenAiServiceImpl implements OpenAiService {
 
     @Qualifier("gptRestTemplate")
     @Autowired
@@ -39,17 +41,22 @@ public class OpenAiServiceImpl implements MyOpenAiService {
     private MensagemRepository mensagemRepository;
 
     @Autowired
+    private BotRepository botRepository;
+
+    @Autowired
     private CustomObjectMapper<Mensagem, MensagemDTO> mensagemMapper;
 
     private final Logger logger = LoggerFactory.getLogger(OpenAiServiceImpl.class);
 
-    public void responder(Chat chat, String prompt) {
+    public void responder(Chat chat, String userPrompt) {
 
         MensagemDTO resposta = new MensagemDTO();
 
         try {
 
-            ChatRequestDTO chatRequest = new ChatRequestDTO(model, "Your are a helpful assistant.", prompt);
+            String systemPrompt = botRepository.findByNecessidadeId(chat.getNecessidade().getId()).map(Bot::getMensagemSistema).orElse("Your are a helpful assistant.");
+
+            ChatRequestDTO chatRequest = new ChatRequestDTO(model, systemPrompt, userPrompt);
 
             ChatResponseDTO response = restTemplate.postForObject(apiUrl, chatRequest,
                     ChatResponseDTO.class);

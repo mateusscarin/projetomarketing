@@ -62,6 +62,18 @@ public class MensagemController {
         return service.listarPorId(id);
     }
 
+    @GetMapping("/chat/{id}")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Criado (Created)", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemDTO.class)) }),
+        @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
+        @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
+        @ApiResponse(responseCode = "500", description = "Erro Interno (Internal Server Error)")
+    })
+    public ResponseEntity<Object> listarPorIdDoChat(@PathVariable Long id) throws Exception {
+        return service.listarPorIdDoChat(id);
+    }
+
     @PutMapping("/{id}")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Criado (Created)", content = {
