@@ -73,7 +73,6 @@ public class JwtSecurityConfig {
                         .anyRequest().authenticated())
                 .cors((cors) -> corsConfigurationSource())
                 .csrf((csrf) -> csrf.disable())
-                .cors((cors) -> corsConfigurationSource())
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer((oauth2ResourceServer) -> oauth2ResourceServer.jwt(Customizer.withDefaults()))
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
