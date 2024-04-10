@@ -8,11 +8,16 @@ import com.fatec.quintosemestre.projetomarketing.model.enumerated.TipoAssistente
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class ChatDTO {
 
     private Long id;
+
+    @NotNull(message = "O título do chat precisa ser informado")
+    @NotBlank(message = "O título do chat não pode ser em branco!")
+    private String titulo;
 
     @NotNull(message = "o ID da necessidade precisa ser informado para a abertura do chat!")
     private Long idNecessidade;
@@ -102,6 +107,14 @@ public class ChatDTO {
 
     public void setTipoAssistente(TipoAssistente tipoAssistente) {
         this.tipoAssistente = tipoAssistente;
+    }
+    
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
 }
