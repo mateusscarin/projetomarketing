@@ -21,7 +21,6 @@ import com.fatec.quintosemestre.projetomarketing.model.Profissional;
 import com.fatec.quintosemestre.projetomarketing.model.Usuario;
 import com.fatec.quintosemestre.projetomarketing.model.dto.ChatDTO;
 import com.fatec.quintosemestre.projetomarketing.repository.ChatRepository;
-import com.fatec.quintosemestre.projetomarketing.repository.UsuarioRepository;
 import com.fatec.quintosemestre.projetomarketing.service.ChatService;
 import com.fatec.quintosemestre.projetomarketing.service.util.ApiResponse;
 
@@ -30,9 +29,6 @@ public class ChatServiceImpl implements ChatService {
 
     @Autowired
     private ChatRepository chatRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private CustomObjectMapper<Chat, ChatDTO> chatMapper;
@@ -48,9 +44,7 @@ public class ChatServiceImpl implements ChatService {
          */
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
-        Usuario usuarioLogado = usuarioRepository.findByCpf(token.getClaimAsString("principal")).get();
-
-        chat.setUsuarioAbertura(usuarioLogado);
+        chat.setUsuarioAbertura(new Usuario(Long.valueOf(token.getClaimAsString("id"))));
 
         Chat objetoCriado = chatRepository.saveAndFlush(chat);
         return ResponseEntity.created(
@@ -81,10 +75,10 @@ public class ChatServiceImpl implements ChatService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
-        Usuario usuarioLogado = usuarioRepository.findByCpf(token.getClaimAsString("principal")).get();
+        Usuario usuarioLogado = new Usuario(Long.valueOf(token.getClaimAsString("id")));
 
         // Se um usuário tentar editar um chat que não foi aberto por ele, lançar um erro
-        if(!paraEditar.getUsuarioAbertura().equals(usuarioLogado)) {
+        if(!paraEditar.getUsuarioAbertura().getId().equals(usuarioLogado.getId())) {
             throw new BadCredentialsException("Operação não autorizada");
         }
 
@@ -106,7 +100,7 @@ public class ChatServiceImpl implements ChatService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
-        Usuario usuarioLogado = usuarioRepository.findByCpf(token.getClaimAsString("principal")).get();
+        Usuario usuarioLogado = new Usuario(Long.valueOf(token.getClaimAsString("id")));
 
         List<ChatDTO> chats = chatMapper.converterParaListaDeDtos(
                 chatRepository.findByUsuarioAberturaIdOrderByDataAberturaDesc(usuarioLogado.getId()));
@@ -152,7 +146,7 @@ public class ChatServiceImpl implements ChatService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
-        Usuario usuarioLogado = usuarioRepository.findByCpf(token.getClaimAsString("principal")).get();
+        Usuario usuarioLogado = new Usuario(Long.valueOf(token.getClaimAsString("id")));
 
         Chat paraAtender = chatRepository.findById(idChat)
                 .orElseThrow(() -> new NoSuchElementException("O chat com ID " + idChat + " não foi encontrado!"));
