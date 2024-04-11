@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class MensagemDTO {
 
-    private Long id;
+    private String id;
 
     @NotNull(message = "O id do do chat precisar ser informado para que a mensagem seja vinculada ao respectivo chat!")
     private Long idChat;
@@ -30,15 +30,15 @@ public class MensagemDTO {
     @NotBlank(message = "O campo texto não pode estar em branco!")
     private String texto;
 
-    @NotNull(message = "A origem da mensagem deve ser informada!")
+    // @NotNull(message = "A origem da mensagem deve ser informada!")
     @Enumerated(EnumType.STRING)
     private OrigemMensagem origemMensagem;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
