@@ -12,6 +12,6 @@ import com.fatec.quintosemestre.projetomarketing.service.util.CrudService;
  *
  * @author Carlos Fernandes
  */
-public interface NecessidadeService extends CrudService<NecessidadeDTO>{
+public interface NecessidadeService extends CrudService<NecessidadeDTO, Long>{
     
 }
