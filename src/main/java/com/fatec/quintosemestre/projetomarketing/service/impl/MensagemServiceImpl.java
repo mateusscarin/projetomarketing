@@ -130,7 +130,7 @@ public class MensagemServiceImpl implements MensagemService {
             throw new BadCredentialsException("Operação não autorizada");
         }
 
-        BeanUtils.copyProperties(dadosDto, aEditar, "id");
+        BeanUtils.copyProperties(dadosDto, aEditar, "id", "usuario", "chat", "origemMensagem");
         mensagemRepository.saveAndFlush(aEditar);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(mensagemMapper.converterParaDto(aEditar)));
     }
