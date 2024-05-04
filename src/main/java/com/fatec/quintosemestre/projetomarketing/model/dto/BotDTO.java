@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -35,6 +36,7 @@ public class BotDTO {
     private Boolean ativo;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(type = "string", pattern = "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$", example = "2024-01-01 12:00:00")
     private LocalDateTime dataCriacao;
 
     public BotDTO() {
@@ -53,15 +55,16 @@ public class BotDTO {
      * }
      */
 
-    // public BotDTO(Long id, Long idNecessidade, String nomeNecessidade, String modelo, String mensagemSistema,
-    //         boolean ativo) {
-    //     this.id = id;
-    //     this.idNecessidade = idNecessidade;
-    //     this.nomeNecessidade = nomeNecessidade;
-    //     this.modelo = modelo;
-    //     this.mensagemSistema = mensagemSistema;
-    //     this.ativo = ativo;
-    //     this.dataCriacao = LocalDateTime.now();
+    // public BotDTO(Long id, Long idNecessidade, String nomeNecessidade, String
+    // modelo, String mensagemSistema,
+    // boolean ativo) {
+    // this.id = id;
+    // this.idNecessidade = idNecessidade;
+    // this.nomeNecessidade = nomeNecessidade;
+    // this.modelo = modelo;
+    // this.mensagemSistema = mensagemSistema;
+    // this.ativo = ativo;
+    // this.dataCriacao = LocalDateTime.now();
     // }
 
     public Long getId() {
