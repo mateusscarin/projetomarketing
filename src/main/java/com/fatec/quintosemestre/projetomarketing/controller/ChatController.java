@@ -98,16 +98,16 @@ public class ChatController {
         return service.editar(id, dto);
     }
 
-    @PutMapping("/finalizar-ou-reabrir/{id}")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Sucesso (OK)", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ChatDTO.class)) }),
-            @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
-            @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
-            @ApiResponse(responseCode = "500", description = "Erro Interno (Internal Server Error)")
-    })
-    public ResponseEntity<Object> finalizarOuReabrirChat(@PathVariable Long id) throws Exception {
-        throw new UnsupportedOperationException("Método não suportado");
-    }
+//     @PutMapping("/finalizar-ou-reabrir/{id}")
+//     @ApiResponses({
+//             @ApiResponse(responseCode = "200", description = "Sucesso (OK)", content = {
+//                     @Content(mediaType = "application/json", schema = @Schema(implementation = ChatDTO.class)) }),
+//             @ApiResponse(responseCode = "401", description = "Não Autorizado (Unauthorized)"),
+//             @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
+//             @ApiResponse(responseCode = "500", description = "Erro Interno (Internal Server Error)")
+//     })
+//     public ResponseEntity<Object> finalizarOuReabrirChat(@PathVariable Long id) throws Exception {
+//         throw new UnsupportedOperationException("Método não suportado");
+//     }
 
 }

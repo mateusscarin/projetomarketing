@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
  *
  * @author Carlos Fernandes
  */
-public interface BotService extends CrudService<BotDTO>{
+public interface BotService extends CrudService<BotDTO, Long>{
     
     ResponseEntity<Object> alterarStatus(Long id);
     

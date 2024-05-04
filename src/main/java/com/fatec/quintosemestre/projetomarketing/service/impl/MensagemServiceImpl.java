@@ -1,21 +1,8 @@
 package com.fatec.quintosemestre.projetomarketing.service.impl;
 
-import com.fatec.quintosemestre.projetomarketing.mapper.CustomObjectMapper;
-import com.fatec.quintosemestre.projetomarketing.model.Chat;
-import com.fatec.quintosemestre.projetomarketing.model.Mensagem;
-import com.fatec.quintosemestre.projetomarketing.model.Usuario;
-import com.fatec.quintosemestre.projetomarketing.model.dto.MensagemDTO;
-import com.fatec.quintosemestre.projetomarketing.model.enumerated.OrigemMensagem;
-import com.fatec.quintosemestre.projetomarketing.model.enumerated.TipoAssistente;
-import com.fatec.quintosemestre.projetomarketing.repository.ChatRepository;
-import com.fatec.quintosemestre.projetomarketing.repository.MensagemRepository;
-import com.fatec.quintosemestre.projetomarketing.repository.UsuarioRepository;
-import com.fatec.quintosemestre.projetomarketing.service.MensagemService;
-import com.fatec.quintosemestre.projetomarketing.service.OpenAiService;
-import com.fatec.quintosemestre.projetomarketing.service.util.ApiResponse;
 import java.util.List;
-import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +12,21 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.fatec.quintosemestre.projetomarketing.mapper.CustomObjectMapper;
+import com.fatec.quintosemestre.projetomarketing.model.Chat;
+import com.fatec.quintosemestre.projetomarketing.model.Mensagem;
+import com.fatec.quintosemestre.projetomarketing.model.Usuario;
+import com.fatec.quintosemestre.projetomarketing.model.dto.MensagemDTO;
+import com.fatec.quintosemestre.projetomarketing.model.enumerated.OrigemMensagem;
+import com.fatec.quintosemestre.projetomarketing.model.enumerated.TipoAssistente;
+import com.fatec.quintosemestre.projetomarketing.repository.ChatRepository;
+import com.fatec.quintosemestre.projetomarketing.repository.MensagemRepository;
+import com.fatec.quintosemestre.projetomarketing.service.MensagemService;
+import com.fatec.quintosemestre.projetomarketing.service.OpenAiService;
+import com.fatec.quintosemestre.projetomarketing.service.util.ApiResponse;
 
 @Service
 public class MensagemServiceImpl implements MensagemService {
@@ -35,9 +36,6 @@ public class MensagemServiceImpl implements MensagemService {
 
     @Autowired
     private ChatRepository chatRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private OpenAiService openAiService;
@@ -56,11 +54,11 @@ public class MensagemServiceImpl implements MensagemService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
-        Usuario usuarioLogado = usuarioRepository.findByCpf(token.getClaimAsString("principal")).get();
+        Usuario usuarioLogado = new Usuario(Long.valueOf(token.getClaimAsString("id")));
 
         // Se um usuário tentar enviar uma mensagem em um chat que não é dele, lançar um
         // erro
-        if (!chat.getUsuarioAbertura().equals(usuarioLogado)) {
+        if (!chat.getUsuarioAbertura().getId().equals(usuarioLogado.getId())) {
             throw new BadCredentialsException("Operação não autorizada");
         }
 
@@ -91,7 +89,7 @@ public class MensagemServiceImpl implements MensagemService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
-        Usuario usuarioLogado = usuarioRepository.findByCpf(token.getClaimAsString("principal")).get();
+        Usuario usuarioLogado = new Usuario(Long.valueOf(token.getClaimAsString("id")));
 
         List<MensagemDTO> mensagem = mensagemMapper
                 .converterParaListaDeDtos(mensagemRepository.findByUsuarioId(usuarioLogado.getId()));
@@ -104,7 +102,7 @@ public class MensagemServiceImpl implements MensagemService {
     }
 
     @Override
-    public ResponseEntity<Object> editar(Long idObjeto, MensagemDTO objeto) throws Exception {
+    public ResponseEntity<Object> editar(String idObjeto, MensagemDTO objeto) throws Exception {
 
         Chat chat = chatRepository.findById(objeto.getIdChat()).orElseThrow(
                 () -> new NoSuchElementException("Chat com ID " + objeto.getId() + " não foi encontrado!"));
@@ -116,17 +114,17 @@ public class MensagemServiceImpl implements MensagemService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
-        Usuario usuarioLogado = usuarioRepository.findByCpf(token.getClaimAsString("principal")).get();
+        Usuario usuarioLogado = new Usuario(Long.valueOf(token.getClaimAsString("id")));
 
         // Se um usuário tentar editar uma mensagem em um chat que não é dele, lançar um
         // erro
-        if (!chat.getUsuarioAbertura().equals(usuarioLogado)) {
+        if (!chat.getUsuarioAbertura().getId().equals(usuarioLogado.getId())) {
             throw new BadCredentialsException("Operação não autorizada");
         }
 
         // Se um usuário tentar editar uma mensagem que foi enviada por outro usuário,
         // lançar um erro
-        if (!aEditar.getUsuario().equals(usuarioLogado)) {
+        if (!aEditar.getUsuario().getId().equals(usuarioLogado.getId())) {
             throw new BadCredentialsException("Operação não autorizada");
         }
 
@@ -136,7 +134,7 @@ public class MensagemServiceImpl implements MensagemService {
     }
 
     @Override
-    public ResponseEntity<Object> listarPorId(Long idObjeto) throws Exception {
+    public ResponseEntity<Object> listarPorId(String idObjeto) throws Exception {
         Mensagem mensagem = mensagemRepository.findById(idObjeto)
                 .orElseThrow(
                         () -> new NoSuchElementException("A mensagem com ID " + idObjeto + " não foi encontrada!"));
@@ -150,9 +148,9 @@ public class MensagemServiceImpl implements MensagemService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt token = (Jwt) authentication.getPrincipal();
-        Usuario usuarioLogado = usuarioRepository.findByCpf(token.getClaimAsString("principal")).get();
+        Usuario usuarioLogado = new Usuario(Long.valueOf(token.getClaimAsString("id")));
 
-        if (!chat.getUsuarioAbertura().equals(usuarioLogado)) {
+        if (!chat.getUsuarioAbertura().getId().equals(usuarioLogado.getId())) {
             throw new BadCredentialsException("Operação não autorizada");
         }
 

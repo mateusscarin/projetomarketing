@@ -58,7 +58,7 @@ public class MensagemController {
             @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
             @ApiResponse(responseCode = "500", description = "Erro Interno (Internal Server Error)")
     })
-    public ResponseEntity<Object> listarPorId(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Object> listarPorId(@PathVariable String id) throws Exception {
         return service.listarPorId(id);
     }
 
@@ -82,7 +82,7 @@ public class MensagemController {
             @ApiResponse(responseCode = "404", description = "Não Encontrado (Not Found)"),
             @ApiResponse(responseCode = "500", description = "Erro Interno (Internal Server Error)")
     })
-    public ResponseEntity<Object> editar(@PathVariable Long id, @RequestBody @Valid MensagemDTO dto) throws Exception {
+    public ResponseEntity<Object> editar(@PathVariable String id, @RequestBody @Valid MensagemDTO dto) throws Exception {
         return service.editar(id, dto);
     }
 
