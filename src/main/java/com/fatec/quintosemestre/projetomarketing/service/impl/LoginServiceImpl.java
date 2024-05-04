@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import com.fatec.quintosemestre.projetomarketing.model.dto.LoginDTO;
+import com.fatec.quintosemestre.projetomarketing.security.impl.UserDetailsImpl;
 import com.fatec.quintosemestre.projetomarketing.service.LoginService;
 import com.fatec.quintosemestre.projetomarketing.service.util.ApiResponse;
 
@@ -36,6 +37,8 @@ public class LoginServiceImpl implements LoginService {
                 dto.getSenha());
         Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
 
+        UserDetailsImpl details = (UserDetailsImpl) authenticationResponse.getPrincipal();
+
         Instant now = Instant.now();
         long expiry = 36000L;
 
@@ -49,6 +52,7 @@ public class LoginServiceImpl implements LoginService {
                 .subject(authenticationResponse.getName())
                 .claim("scope", scope)
                 .claim("principal", dto.getCpf())
+                .claim("id", details.getId())
                 .build();
 
         String token = encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

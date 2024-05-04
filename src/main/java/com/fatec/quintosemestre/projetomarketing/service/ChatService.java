@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import com.fatec.quintosemestre.projetomarketing.model.dto.ChatDTO;
 import com.fatec.quintosemestre.projetomarketing.service.util.CrudService;
 
-public interface ChatService extends CrudService<ChatDTO> {
+public interface ChatService extends CrudService<ChatDTO, Long> {
 
     ResponseEntity<Object> listarPorUsuarioAbertura() throws Exception;
 

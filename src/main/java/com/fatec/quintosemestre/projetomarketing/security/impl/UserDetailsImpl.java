@@ -26,6 +26,10 @@ public class UserDetailsImpl implements UserDetails {
         this.permissoes = Arrays.asList(new SimpleGrantedAuthority(tipoUsuario.toString()));
     }
 
+    public Long getId() {
+        return this.id;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.permissoes;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.fatec.quintosemestre.projetomarketing.model.Mensagem;
 
 @Repository
-public interface MensagemRepository extends JpaRepository<Mensagem, Long>{
+public interface MensagemRepository extends JpaRepository<Mensagem, String>{
 
     List<Mensagem> findByUsuarioId(Long idUsuario);
 

@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -24,6 +25,11 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
+
+    @Column(unique = true)
+    @NotNull(message = "O título do chat precisa ser informado")
+    @NotBlank(message = "O título do chat não pode ser em branco!")
+    private String titulo;
 
     @JoinColumn(name = "id_necessidade")
     @ManyToOne
@@ -111,6 +117,14 @@ public class Chat {
 
     public void setTipoAssistente(TipoAssistente tipoAssistente) {
         this.tipoAssistente = tipoAssistente;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     @PrePersist
