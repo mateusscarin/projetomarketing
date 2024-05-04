@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,6 +23,11 @@ public class UsuarioDTO {
     @NotBlank
     @CPF(message = "O CPF precisa ser válido!")
     private String cpf;
+
+    @NotNull(message = "O email precisa ser informado!")
+    @NotBlank(message = "O email não pode estar em branco!")
+    @Email(message = "O email informado é inválido!")
+    private String email;
 
     @NotNull(message = "A senha precisa ser informada!")
     @NotBlank(message = "A senha não pode estar em branco!")
@@ -57,6 +63,14 @@ public class UsuarioDTO {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getSenha() {
