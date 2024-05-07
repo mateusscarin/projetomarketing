@@ -26,7 +26,10 @@ public class MensagemMapperImpl implements CustomObjectMapper<Mensagem, Mensagem
         dto.setDataDeEnvio(entity.getDataDeEnvio());
         dto.setId(entity.getId());
         dto.setIdChat(entity.getChat().getId());
-        dto.setNomeUsuario(entity.getUsuario().getNomeCompleto());
+        if (entity.getUsuario() != null) {
+            dto.setIdUsuario(entity.getUsuario().getId());
+            dto.setNomeUsuario(entity.getUsuario().getNomeCompleto());
+        }
         dto.setTexto(entity.getTexto());
         dto.setOrigemMensagem(entity.getOrigemMensagem());
         return dto;
